@@ -1,4 +1,6 @@
 // miniprogram/pages/index/index.js
+const db = wx.cloud.database()
+
 Page({
 
   /**
@@ -10,6 +12,7 @@ Page({
         'https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640',
         'https://images.unsplash.com/photo-1551446591-142875a901a1?w=640'
       ],
+      listData : []
   },
 
   /**
@@ -23,7 +26,16 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
+        db.collection('users').field({
+          userPhoto : true,
+          nickName : true,
+          links : true
+        }).get().then((res)=>{
+          console.log(res)
+             this.setData({
+               listData : res.data
+             });
+        });
   },
 
   /**
@@ -66,5 +78,15 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+  handleLinks(ev){
+      let id = ev.target.dataset.id;
+      db.collection('users').doc(id).update({
+        data : {
+          links : 5
+        }
+      }).then((res)=>{
+          console.log(res)
+      });
   }
 })

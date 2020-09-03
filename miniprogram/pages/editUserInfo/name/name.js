@@ -90,6 +90,7 @@ Page({
         wx.showToast({
           title: '更新完成',
         })
+        app.userInfo.nickName = this.data.nickName
     });
   },
   bindGetUserInfo(ev){
